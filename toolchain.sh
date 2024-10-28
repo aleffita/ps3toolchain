@@ -22,7 +22,7 @@ BUILD_SCRIPTS=`ls ../scripts/*.sh | sort`
 ## If specific steps were requested...
 if [ $1 ]; then
 
-  ## Find the requested build scripts.
+  ## Find the requested  build scripts.
   REQUESTS=""
 
   for STEP in $@; do
