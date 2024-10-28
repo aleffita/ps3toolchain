@@ -40,7 +40,7 @@ jobs:
       if: success()
       id: login
       env:
-        GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_PASSWORD: ${{ secrets.GPASSWORD }}
       run: |
         echo "${GITHUB_PASSWORD}" | docker login --username "${{ steps.prepare.outputs.docker_username }}" --password-stdin docker.pkg.github.com
         echo ::set-output name=buildx::$(echo docker buildx build --output type=image,name=${{ steps.prepare.outputs.github_image }},push=true \
