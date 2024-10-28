@@ -2,7 +2,7 @@
 # gcc-newlib-SPU.sh by Naomi Peori (naomi@peori.ca)
 
 GCC="gcc-9.5.0"
-NEWLIB="newlib-1.20.0"
+NEWLIB="newlib-4.2.0.20211231"
 
 if [ ! -d ${GCC} ]; then
 
@@ -58,10 +58,9 @@ CFLAGS_FOR_TARGET="-Os -fpic -ffast-math -ftree-vectorize -funroll-loops -fsched
     --enable-threads \
     --with-newlib \
     --enable-newlib-multithread \
-    --enable-newlib-hw-fp \
     --with-pic
 
 ## Compile and install.
-PROCS="$(nproc --all 2>&1)" || ret=$?
-if [ ! -z $ret ]; then PROCS=4; fi
+PROCS="$(grep -c '^processor' /proc/cpuinfo 2>/dev/null)" || ret=$?
+if [ ! -z $ret ]; then PROCS="$(sysctl -n hw.ncpu 2>/dev/null)"; fi
 ${MAKE:-make} -j $PROCS all && ${MAKE:-make} install

@@ -2,7 +2,7 @@
 # gcc-newlib-PPU.sh by Naomi Peori (naomi@peori.ca)
 
 GCC="gcc-13.2.0"
-NEWLIB="newlib-1.20.0"
+NEWLIB="newlib-4.4.0.20231231"
 
 if [ ! -d ${GCC} ]; then
 
@@ -59,10 +59,9 @@ cd ${GCC}/build-ppu
     --with-cpu="cell" \
     --with-newlib \
     --enable-newlib-multithread \
-    --enable-newlib-hw-fp \
     --with-system-zlib
 
 ## Compile and install.
-PROCS="$(nproc --all 2>&1)" || ret=$?
-if [ ! -z $ret ]; then PROCS=4; fi
+PROCS="$(grep -c '^processor' /proc/cpuinfo 2>/dev/null)" || ret=$?
+if [ ! -z $ret ]; then PROCS="$(sysctl -n hw.ncpu 2>/dev/null)"; fi
 ${MAKE:-make} -j $PROCS all && ${MAKE:-make} install
